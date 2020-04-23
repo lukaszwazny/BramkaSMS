@@ -1,1 +1,88 @@
-<p>contact-list works!</p>
+
+<!--przyciski-->
+<div class="row">
+
+	<div class="col-lg-1 col-md-2 mtop">
+		<button type="button" class="btn btn-success">Nowy</button>
+	</div>
+
+	<div class="col-lg-5 col-md-10 mtop">
+		<div class="input-group">
+		  <div class="input-group-prepend">
+		    <span class="input-group-text">Szukaj: </span>
+		  </div>
+		  <input type="text" class="form-control" placeholder="Imię">
+		  <input type="text" class="form-control" placeholder="Nazwisko">
+		</div>
+	</div>
+
+	<div class="col-lg-5 mtop">
+		<div class="input-group">
+		  <div class="input-group-prepend">
+		    <span class="input-group-text">Sortuj wg: </span>
+		  </div>
+		  <select class="custom-select">
+		    <option value="1">Imię rosnąco</option>
+		    <option value="2">Imię malejąco</option>
+		    <option value="3">Nazwisko rosnąco</option>
+		    <option value="4">Nazwisko malejąco</option>
+		    <option value="5">Nr tel rosnąco</option>
+		    <option value="6">Nr tel malejąco</option>
+		  </select>
+		</div>
+	</div>
+
+</div>
+<!--END przyciski-->
+
+<!--lista-->
+<div class="row">
+	<div class="col-md mtop">
+		<button type="button" class="btn btn-outline-primary cursor-normal width-full" disabled>Lista kontaktów:</button>
+	<ul class="list-group mtop">
+	  <li class="list-group-item" *ngFor="let contact of contactList">
+
+	  	<div class="row" >
+		  	<div class="col-md-6">
+		  		<p>{{ contact.name + " " + contact.surname + ", " + contact.phoneNumber }}</p>
+		  	</div>
+		  	<div class="col-md-6">
+		  		<div class="right">
+			  		<button (click)="toContactDetails(contact.id)" type="button" class="btn btn-info">Szczegóły</button>
+			  		<button (click)="toContactEdit(contact.id)" type="button" class="btn btn-warning">Edytuj</button>
+			  		<button (click)="openModal(contact)" type="button" class="btn btn-danger">Usuń</button>
+		  		</div>
+		  	</div>
+	  	</div>
+
+	  </li>
+
+	</ul>
+	</div>
+</div>
+<!--END lista-->
+
+<!-- Modal- po kliknięciu "usuń" -->
+<div #modal class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">UWAGA</h4>
+        <button (click)="closeModal()" type="button" class="close" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Czy na pewno chcesz usunąć kontakt:</p>
+        <p><b>{{ contactToDelete.name + " " + contactToDelete.surname}}</b></p>
+        <p><b>{{ contactToDelete.phoneNumber}}</b></p>
+
+      </div>
+      <div class="modal-footer">
+        <button (click)="deleteContact(contactToDelete.id)" type="button" class="btn btn-danger">Usuń</button>
+        <button (click)="closeModal()" type="button" class="btn btn-outline-primary">Nie usuwaj</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END modal -->

@@ -12,6 +12,8 @@ import {MessageHistoryComponent} from './messages/message-history/message-histor
 
 import {ContactListComponent} from './contacts/contact-list/contact-list.component';
 import {ContactAddComponent} from './contacts/contact-add/contact-add.component';
+import {ContactDetailsComponent} from './contacts/contact-details/contact-details.component';
+import {ContactEditComponent} from './contacts/contact-edit/contact-edit.component';
 
 
 const routes: Routes = [
@@ -30,6 +32,8 @@ const routes: Routes = [
 	{path: 'contacts', redirectTo: 'contacts/list'},
 	{path: 'contacts/list', component: ContactListComponent},
 	{path: 'contacts/add', component: ContactAddComponent},
+	{path: 'contacts/:id', component: ContactDetailsComponent},
+	{path: 'contacts/:id/edit', component: ContactEditComponent},
 
 ];
 
