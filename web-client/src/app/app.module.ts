@@ -11,6 +11,8 @@ import {MatSelectModule} from '@angular/material/select';
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { fas } from "@fortawesome/free-solid-svg-icons";
 
+import { NgxMaskModule, IConfig } from 'ngx-mask'
+
 @NgModule({
   declarations: [
     AppComponent
@@ -22,10 +24,11 @@ import { fas } from "@fortawesome/free-solid-svg-icons";
     MatSidenavModule,
     MatFormFieldModule,
     MatSelectModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    NgxMaskModule.forRoot()
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { 
 	constructor(library: FaIconLibrary) {

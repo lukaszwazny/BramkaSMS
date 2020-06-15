@@ -35,6 +35,10 @@ export class ContactListComponent implements OnInit {
   		.subscribe(contact => this.contactList = contact);
   }
 
+  toContactAdd(){
+    this.router.navigate(['/contacts/add']);
+  }
+
   toContactDetails(id) {
     this.router.navigate(['/contacts/' + id]);
   }
