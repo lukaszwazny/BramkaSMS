@@ -11,7 +11,7 @@
 		  <div class="input-group-prepend">
 		    <span class="input-group-text">Imię: </span>
 		  </div>
-		  <input type="text" class="form-control" placeholder="Imię">
+		  <input [(ngModel)]="name" type="text" class="form-control" placeholder="Imię">
 		</div>
 	</div>
 
@@ -20,7 +20,7 @@
 		  <div class="input-group-prepend">
 		    <span class="input-group-text">Nazwisko: </span>
 		  </div>
-		  <input type="text" class="form-control" placeholder="Nazwisko">
+		  <input [(ngModel)]="surname" type="text" class="form-control" placeholder="Nazwisko">
 		</div>
 	</div>
 </div>
@@ -31,7 +31,7 @@
 		  <div class="input-group-prepend">
 		    <span class="input-group-text">Nr telefonu: </span>
 		  </div>
-		  <input matInput mask="00/00/0000"/>
+		  <input [(ngModel)]="phoneNumber" class="form-control" placeholder="+48 XXX XXX XXX" prefix="+48" matInput mask=" 000 000 000"/>
 		</div>
 	</div>
 
@@ -41,10 +41,10 @@
 		    <span class="input-group-text">Grupy: </span>
 		  </div>
 		  <ng-multiselect-dropdown
-  [placeholder]="'custom placeholder'"
+  [placeholder]="'Wybierz grupę:'"
   [settings]="dropdownSettings"
-  [data]="dropdownList"
-  [(ngModel)]="selectedItems"
+  [data]="groupList"
+  [(ngModel)]="selectedGroups"
   
   (onSelect)="onItemSelect($event)"
   (onSelectAll)="onSelectAll($event)"
@@ -57,6 +57,6 @@
 
 <div class="row">
 	<div class="col-lg-12 mtop">
-		<button type="button" class="btn btn-success">Nowy</button>
+		<button type="button" class="btn btn-success" (click)="addContact()">Nowy</button>
 	</div>
 </div>

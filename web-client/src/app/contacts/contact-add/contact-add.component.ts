@@ -3,6 +3,12 @@ import { Component, OnInit, NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/co
 import { IDropdownSettings, NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 import {FormsModule} from '@angular/forms';
+import {Router} from '@angular/router';
+
+import { NgxMaskModule, IConfig } from 'ngx-mask'
+
+import {Group} from '../../data/groups/group';
+import {ContactsService} from '../../services/contacts.service';
 
 
 
@@ -13,41 +19,46 @@ import {FormsModule} from '@angular/forms';
 })
 export class ContactAddComponent implements OnInit {
 
-  dropdownList = [];
-  selectedItems = [];
+  groupList = [];
+  selectedGroups = [];
   dropdownSettings = {};
 
-  constructor() { }
+  name = '';
+  surname = '';
+  phoneNumber = '';
+
+  constructor(private contactsService: ContactsService, private router: Router) { }
 
   ngOnInit() {
-  this.dropdownList = [
-      { item_id: 1, item_text: 'Mumbai' },
-      { item_id: 2, item_text: 'Bangaluru' },
-      { item_id: 3, item_text: 'Pune' },
-      { item_id: 4, item_text: 'Navsari' },
-      { item_id: 5, item_text: 'New Delhi' }
-    ];
-    this.selectedItems = [
-      { item_id: 3, item_text: 'Pune' },
-      { item_id: 4, item_text: 'Navsari' }
-    ];
+
+  	this.contactsService
+  		.getGroupList('')
+  		.subscribe(group => this.groupList = group);
+
     this.dropdownSettings = {
       singleSelection: false,
-      idField: 'item_id',
-      textField: 'item_text',
-      selectAllText: 'Select All',
-      unSelectAllText: 'UnSelect All',
+      idField: 'id',
+      textField: 'name',
+      selectAllText: 'Zaznacz wszystko',
+      unSelectAllText: 'Odzaznacz wszystko',
+      searchPlaceholderText: 'Szukaj',
       itemsShowLimit: 3,
-      allowSearchFilter: true
+      allowSearchFilter: true,
+      noDataAvailablePlaceholderText: 'Brak grup'
     };
 
   }
 
   onItemSelect(item: any) {
-    console.log(item);
+    console.log(this.selectedGroups);
   }
   onSelectAll(items: any) {
     console.log(items);
+  }
+
+  addContact(){
+  	this.contactsService.addContact(this.name, this.surname, '+48' + this.phoneNumber, this.selectedGroups);
+  	this.router.navigate(['/contacts/list']);
   }
 
 }
@@ -55,7 +66,7 @@ export class ContactAddComponent implements OnInit {
 
 @NgModule({
 	declarations: [ContactAddComponent],
-	imports: [NgMultiSelectDropDownModule, FormsModule],
+	imports: [NgMultiSelectDropDownModule, FormsModule, NgxMaskModule.forRoot()],
 	schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 class ContactListModule{}

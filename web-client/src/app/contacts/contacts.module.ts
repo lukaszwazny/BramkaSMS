@@ -6,7 +6,6 @@ import { ContactDetailsComponent } from './contact-details/contact-details.compo
 import { ContactAddComponent } from './contact-add/contact-add.component';
 import { ContactEditComponent } from './contact-edit/contact-edit.component';
 
-
 @NgModule({
   declarations: [ContactListComponent, ContactDetailsComponent, ContactAddComponent, ContactEditComponent],
   imports: [
