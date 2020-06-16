@@ -22,13 +22,6 @@ export class ContactsService {
   		return obsList;
   }
 
-  getGroupList(name) : Observable<Group[]> {
-  		//do podmiany, gdy będzie API
-  		let list : Group[] = groupList;
-  		let obsList = of(list);
-  		return obsList;
-  }
-
   addContact(name, surname, phoneNumber, groupList){
   	console.log(name, surname, phoneNumber, groupList);
   }
@@ -38,7 +31,20 @@ export class ContactsService {
   }
 
   getContact(id) : Contact{
-  	return Observable.of(contactList[Math.floor(Math.random() * contactList.length)])
+  	//return Observable.of(contactList[Math.floor(Math.random() * contactList.length)])
+  	return contactList[id-1];
+  }
+
+  getContactGroups(id) : Group[] {
+  	//returns random groups
+  	let randNrOfGroups  = Math.floor(Math.random() * 5);
+  	let list = [];
+  	for(let i = 0; i < randNrOfGroups; i++){
+  		let randGroup = groupList[Math.floor(Math.random() * groupList.length)];
+  		console.log(randGroup);
+  		list.push(randGroup);
+  	}
+  	return list;
   }
 
 }

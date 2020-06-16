@@ -9,6 +9,7 @@ import { NgxMaskModule, IConfig } from 'ngx-mask'
 
 import {Group} from '../../data/groups/group';
 import {ContactsService} from '../../services/contacts.service';
+import {GroupsService} from '../../services/groups.service';
 
 
 
@@ -27,11 +28,11 @@ export class ContactAddComponent implements OnInit {
   surname = '';
   phoneNumber = '';
 
-  constructor(private contactsService: ContactsService, private router: Router) { }
+  constructor(private contactsService: ContactsService, private router: Router, private groupsService: GroupsService) { }
 
   ngOnInit() {
 
-  	this.contactsService
+  	this.groupsService
   		.getGroupList('')
   		.subscribe(group => this.groupList = group);
 
