@@ -50,6 +50,10 @@ export class ContactAddComponent implements OnInit {
 
   }
 
+  toContacts() {
+    this.router.navigate(['/contacts']);
+  }
+
   onItemSelect(item: any) {
     console.log(this.selectedGroups);
   }

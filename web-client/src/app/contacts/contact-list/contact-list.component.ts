@@ -17,6 +17,8 @@ export class ContactListComponent implements OnInit {
 
 	contactList : Contact[];
 
+  filteredContacts : Contact[];
+
 	name: string = '';
 	surname: string = '';
 	phone: string = '';
@@ -33,6 +35,13 @@ export class ContactListComponent implements OnInit {
   	this.contactsService
   		.getContactList(this.name, this.surname, this.phone)
   		.subscribe(contact => this.contactList = contact);
+
+    this.assignCopy();
+
+  }
+
+  assignCopy(){
+    this.filteredContacts = Object.assign([], this.contactList);
   }
 
   toContactAdd(){
@@ -63,6 +72,83 @@ export class ContactListComponent implements OnInit {
   	this.renderer.removeClass(this.modal.nativeElement, 'show');
   	this.renderer.setStyle(this.modal.nativeElement, 'display', 'none');
   }
+
+  filter(name, surname){
+
+    if((!name) && (!surname)){
+         this.assignCopy();
+     } // when nothing has typed
+
+     if((name) && (!surname)){
+      this.filteredContacts = Object.assign([], this.contactList).filter(
+        item => item.name.toLowerCase().indexOf(name.toLowerCase()) > -1
+     )
+     }
+     
+     if((!name) && (surname)){
+      this.filteredContacts = Object.assign([], this.contactList).filter(
+        item => item.surname.toLowerCase().indexOf(surname.toLowerCase()) > -1
+     )
+     }
+
+     if((name) && (surname)){
+     this.filteredContacts = Object.assign([], this.contactList).filter(
+        item => item.name.toLowerCase().indexOf(name.toLowerCase()) > -1
+     )
+      this.filteredContacts = Object.assign([], this.filteredContacts).filter(
+        item => item.surname.toLowerCase().indexOf(surname.toLowerCase()) > -1
+     )
+     }
+  }
+
+  dynamicSort(property) {
+    var sortOrder = 1;
+    if(property[0] === "-") {
+        sortOrder = -1;
+        property = property.substr(1);
+    }
+    return function (a,b) {
+        /* next line works with strings and numbers, 
+         * and you may want to customize it to your needs
+         */
+        var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+        return result * sortOrder;
+    }
+}
+
+  sort(property){
+  console.log(property);
+
+  switch(property){
+
+    case '1': 
+    this.filteredContacts.sort(this.dynamicSort("name"));
+      break;
+
+    case '2': 
+    this.filteredContacts.sort(this.dynamicSort("-name"));
+      break;
+
+    case '3': 
+    this.filteredContacts.sort(this.dynamicSort("surname"));
+      break;
+
+    case '4': 
+    this.filteredContacts.sort(this.dynamicSort("-surname"));
+      break;
+
+    case '5':
+    this.filteredContacts.sort(this.dynamicSort("phoneNumber")); 
+      break;
+
+    case '6': 
+    this.filteredContacts.sort(this.dynamicSort("-phoneNumber"));
+      break;   
+  }
+
+  }
+
+     
 
 }
 

@@ -30,6 +30,10 @@ export class ContactsService {
   	console.log('deleting '+ id);
   }
 
+  updateContact(contact : Contact, groups: Group[]){
+  	console.log('updating ' + contact.id + ' ' + contact.name + ' ' + contact.surname + ' ' + contact.phoneNumber + ' ' + groups)
+  }
+
   getContact(id) : Contact{
   	//return Observable.of(contactList[Math.floor(Math.random() * contactList.length)])
   	return contactList[id-1];

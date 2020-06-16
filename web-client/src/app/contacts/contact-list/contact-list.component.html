@@ -11,8 +11,8 @@
 		  <div class="input-group-prepend">
 		    <span class="input-group-text">Szukaj: </span>
 		  </div>
-		  <input type="text" class="form-control" placeholder="Imię">
-		  <input type="text" class="form-control" placeholder="Nazwisko">
+		  <input #name type="text" class="form-control" placeholder="Imię" (input)="filter(name.value, surname.value)">
+		  <input #surname type="text" class="form-control" placeholder="Nazwisko" (input)="filter(name.value, surname.value)">
 		</div>
 	</div>
 
@@ -21,7 +21,7 @@
 		  <div class="input-group-prepend">
 		    <span class="input-group-text">Sortuj wg: </span>
 		  </div>
-		  <select class="custom-select">
+		  <select #sorting class="custom-select" (input)="sort(sorting.value)">
 		    <option value="1">Imię rosnąco</option>
 		    <option value="2">Imię malejąco</option>
 		    <option value="3">Nazwisko rosnąco</option>
@@ -40,7 +40,7 @@
 	<div class="col-md mtop">
 		<button type="button" class="btn btn-outline-primary cursor-normal width-full" disabled>Lista kontaktów:</button>
 	<ul class="list-group mtop">
-	  <li class="list-group-item" *ngFor="let contact of contactList">
+	  <li class="list-group-item" *ngFor="let contact of filteredContacts">
 
 	  	<div class="row" >
 		  	<div class="col-md-6">
