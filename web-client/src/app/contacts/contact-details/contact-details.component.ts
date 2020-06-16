@@ -5,6 +5,8 @@ import {Group} from '../../data/groups/group';
 import {ContactsService} from '../../services/contacts.service';
 import { ActivatedRoute } from '@angular/router';
 import {Router} from '@angular/router';
+import {Renderer2} from '@angular/core';
+import {ViewChild} from '@angular/core'
 
 @Component({
   selector: 'app-contact-details',
@@ -16,8 +18,10 @@ export class ContactDetailsComponent implements OnInit {
   contact : Contact;
   groupsOfContact: Group[];
 
+  @ViewChild('modal') modal;
+
   constructor(private contactsService: ContactsService,
-    private route: ActivatedRoute, private router: Router) { }
+    private route: ActivatedRoute, private router: Router, private renderer: Renderer2) { }
 
   ngOnInit() {
   	let id = this.route.snapshot.paramMap.get('id');
@@ -33,6 +37,22 @@ export class ContactDetailsComponent implements OnInit {
 
   toContactEdit() {
     this.router.navigate(['/contacts/' + this.contact.id + '/edit']);
+  }
+
+  deleteContact(){
+  	this.contactsService.deleteContact(this.contact.id);
+  	this.router.navigate(['/contacts']);
+  	this.closeModal();
+  }
+
+  openModal(){
+  	this.renderer.addClass(this.modal.nativeElement, 'show');
+  	this.renderer.setStyle(this.modal.nativeElement, 'display', 'block');
+  }
+
+  closeModal(){
+  	this.renderer.removeClass(this.modal.nativeElement, 'show');
+  	this.renderer.setStyle(this.modal.nativeElement, 'display', 'none');
   }
 
 }
