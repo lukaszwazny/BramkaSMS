@@ -1,0 +1,16 @@
+.mtop{
+	margin-top:10px;
+}
+
+.right {
+	float:right;
+}
+
+div.right > button {
+	margin-left:10px;
+}
+
+div > p {
+	margin: 5px 0;
+}
+

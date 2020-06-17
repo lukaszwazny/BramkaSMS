@@ -27,6 +27,8 @@ export class ContactListComponent implements OnInit {
 
 	@ViewChild('modal') modal;
 
+  @ViewChild('sorting') sorting;
+
   constructor(	private contactsService: ContactsService, 
   				private router: Router,
   				private renderer: Renderer2) { }
@@ -99,6 +101,8 @@ export class ContactListComponent implements OnInit {
         item => item.surname.toLowerCase().indexOf(surname.toLowerCase()) > -1
      )
      }
+
+     this.sort(this.sorting.nativeElement.value);
   }
 
   dynamicSort(property) {

@@ -39,7 +39,10 @@ export class ContactsService {
 
   getContact(id) : Contact{
   	//return Observable.of(contactList[Math.floor(Math.random() * contactList.length)])
-  	return contactList[id-1];
+  	let contact:Contact = contactList[id-1];
+  	console.log(id);
+  	contact.fullData = contact.name + ' ' + contact.surname + ', ' + contact.phoneNumber;
+  	return contact;
   }
 
   getContactGroups(id) : Group[] {

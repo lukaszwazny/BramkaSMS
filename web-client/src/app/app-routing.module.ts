@@ -11,6 +11,7 @@ import {GroupEditComponent} from './groups/group-edit/group-edit.component';
 import {MessageListComponent} from './messages/message-list/message-list.component';
 import {MessageAddComponent} from './messages/message-add/message-add.component';
 import {MessageHistoryComponent} from './messages/message-history/message-history.component';
+import {MessageDetailsComponent} from './messages/message-details/message-details.component';
 
 import {ContactListComponent} from './contacts/contact-list/contact-list.component';
 import {ContactAddComponent} from './contacts/contact-add/contact-add.component';
@@ -32,6 +33,7 @@ const routes: Routes = [
 	{path: 'messages/list', component: MessageListComponent},
 	{path: 'messages/add', component: MessageAddComponent},
 	{path: 'messages/history', component: MessageHistoryComponent},
+	{path: 'messages/:id', component: MessageDetailsComponent},
 
 	{path: 'contacts', redirectTo: 'contacts/list'},
 	{path: 'contacts/list', component: ContactListComponent},

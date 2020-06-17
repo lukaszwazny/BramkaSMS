@@ -19,6 +19,8 @@ export class GroupListComponent implements OnInit {
 
   filteredGroups : Group[];
 
+  @ViewChild('sorting') sorting;
+
 	name: string = '';
 
 	groupToDelete: Group = new Group();
@@ -79,6 +81,9 @@ export class GroupListComponent implements OnInit {
 
     this.filteredGroups = Object.assign([], this.groupList).filter(
         item => item.name.toLowerCase().indexOf(name.toLowerCase()) > -1);
+
+        this.sort(this.sorting.nativeElement.value);
+
   }
 
   dynamicSort(property) {

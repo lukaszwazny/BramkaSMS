@@ -1,1 +1,79 @@
-<p>message-history works!</p>
+
+<!--przyciski-->
+<div class="row">
+
+	<div class="col-lg-1 col-md-2 mtop">
+		<button type="button" class="btn btn-success" (click)="toMessageAdd()">Nowa</button>
+	</div>
+
+	<div class="col-lg-5 col-md-10 mtop">
+		<div class="input-group">
+		  <div class="input-group-prepend">
+		    <span class="input-group-text">Szukaj: </span>
+		  </div>
+		  <input #receiver type="text" class="form-control" placeholder="Odbiorca" (input)="filter(receiver.value, content.value)">
+		  <input #content type="text" class="form-control" placeholder="Treść wiadomości" (input)="filter(receiver.value, content.value)">
+		</div>
+	</div>
+
+	<div class="col-lg-5 mtop">
+		<div class="input-group">
+		  <div class="input-group-prepend">
+		    <span class="input-group-text">Sortuj wg: </span>
+		  </div>
+		  <select #sorting class="custom-select" (input)="sort(sorting.value)">
+		    <option value="1">Odbiorca rosnąco</option>
+		    <option value="2">Odbiorca malejąco</option>
+		    <option value="3">Data rosnąco</option>
+		    <option value="4">Data malejąco</option>
+		  </select>
+		</div>
+	</div>
+
+</div>
+
+<div class="row">
+
+	
+
+	<div class="col-lg-5 mtop">
+		<div class="input-group">
+		  <div class="input-group-prepend">
+		    <span class="input-group-text">Okres: </span>
+		    <input [ngModel]="from | date:'yyyy-MM-dd'" (ngModelChange)="from = $event" type="date" class="form-control" placeholder="Od" (input)="filter(receiver.value, content.value)">
+		    <input [ngModel]="to | date:'yyyy-MM-dd'" (ngModelChange)="to = $event" type="date" class="form-control" placeholder="Do" (input)="filter(receiver.value, content.value)">
+		  </div>
+		  
+		</div>
+	</div>
+
+</div>
+<!--END przyciski-->
+
+<!--lista-->
+<div class="row">
+	<div class="col-md mtop">
+		<button type="button" class="btn btn-outline-primary cursor-normal width-full" disabled>Historia wiadomości:</button>
+	<table class="table table-striped">
+	  <thead>
+	    <tr>
+	      <th scope="col">Data</th>
+	      <th scope="col">Odbiorca</th>
+	      <th scope="col">Treść</th>
+	      <th scope="col">Akcja</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	    <tr *ngFor="let message of filteredMessages">
+	      <th scope="row">{{message.date}}</th>
+	      <td>{{message.receiver}}</td>
+	      <td>{{message.content}}</td>
+	      <td>
+	      	<button (click)="toMessageDetails(message.id)" type="button" class="btn btn-info">Szczegóły</button>
+	      </td>
+	    </tr>
+	  </tbody>
+	</table>
+	</div>
+</div>
+<!--END lista-->
