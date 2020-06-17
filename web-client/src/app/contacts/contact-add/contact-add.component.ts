@@ -33,7 +33,7 @@ export class ContactAddComponent implements OnInit {
   ngOnInit() {
 
   	this.groupsService
-  		.getGroupList('')
+  		.getGroupList()
   		.subscribe(group => this.groupList = group);
 
     this.dropdownSettings = {

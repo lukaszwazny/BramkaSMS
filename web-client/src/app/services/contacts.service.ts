@@ -15,9 +15,12 @@ export class ContactsService {
 
   }
 
-  getContactList(name, surname, phoneNumber) : Observable<Contact[]> {
+  getContactList() : Observable<Contact[]> {
   		//do podmiany, gdy będzie API
   		let list : Contact[] = contactList;
+  		list.forEach( elem => {
+  			elem.fullData = elem.name + ' ' + elem.surname + ', ' + elem.phoneNumber;
+  		})
   		let obsList = of(list);
   		return obsList;
   }

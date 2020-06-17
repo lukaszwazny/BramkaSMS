@@ -13,20 +13,19 @@ import { NgxMaskModule, IConfig } from 'ngx-mask'
 import { IDropdownSettings, NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 @Component({
-  selector: 'app-contact-edit',
-  templateUrl: './contact-edit.component.html',
-  styleUrls: ['./contact-edit.component.css']
+  selector: 'app-group-edit',
+  templateUrl: './group-edit.component.html',
+  styleUrls: ['./group-edit.component.css']
 })
-export class ContactEditComponent implements OnInit {
+export class GroupEditComponent implements OnInit {
 
-  contact : Contact;
+  group : Group;
 
   name = '';
-  surname = '';
   
-  groupsOfContact: Group[];
+  contactsOfGroup: Contact[];
 
-  groupList: Group[];
+  contactList: Contact[];
 
   dropdownSettings = {};
 
@@ -36,45 +35,46 @@ export class ContactEditComponent implements OnInit {
   	let id = this.route.snapshot.paramMap.get('id');
     //this.contactsService.getContact(id)
     //    .subscribe(contact => this.contact = contact);
-    this.contact = this.contactsService.getContact(id);
-    this.groupsOfContact = this.contactsService.getContactGroups(id);
-    this.groupsService
-  		.getGroupList()
-  		.subscribe(group => this.groupList = group);
+    this.group = this.groupsService.getGroup(id);
 
-  	this.name = this.contact.name;
-  	this.surname = this.contact.surname;
+    this.groupsService
+  		.getGroupContacts(id)
+  		.subscribe(contact => this.contactsOfGroup = contact);
+
+    this.contactsService
+  		.getContactList()
+  		.subscribe(contact => this.contactList = contact);
+
+  	this.name = this.group.name;
 
   	this.dropdownSettings = {
       singleSelection: false,
       idField: 'id',
-      textField: 'name',
+      textField: 'fullData',
       selectAllText: 'Zaznacz wszystko',
       unSelectAllText: 'Odzaznacz wszystko',
       searchPlaceholderText: 'Szukaj',
-      itemsShowLimit: 3,
+      itemsShowLimit: 20,
       allowSearchFilter: true,
-      noDataAvailablePlaceholderText: 'Brak grup',
+      noDataAvailablePlaceholderText: 'Brak kontaktów',
     };
   }
 
-  toContactDetails() {
-    this.router.navigate(['/contacts/' + this.contact.id]);
+  toGroupDetails() {
+    this.router.navigate(['/groups/' + this.group.id]);
   }
 
-  updateContact(){
-  	this.contact.phoneNumber = '+48' + this.contact.phoneNumber;
-  	this.contactsService.updateContact(this.contact, this.groupsOfContact);
-  	this.toContactDetails();
+  updateGroup(){
+  	this.groupsService.updateGroup(this.group, this.contactsOfGroup);
+  	this.toGroupDetails();
   }
 
 }
 
-
 //XD, bez tego nie działa *ngFor
 @NgModule({
-	declarations: [ContactEditComponent],
+	declarations: [GroupEditComponent],
 	imports: [CommonModule, NgMultiSelectDropDownModule, FormsModule, NgxMaskModule.forRoot()],
 	schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-class ContactEditModule{}
+class GroupEditModule{}

@@ -1,7 +1,7 @@
 
 <div class="row">
 	<div class="col-lg-12 mtop">
-		<button type="button" class="btn btn-outline-primary cursor-normal width-full" disabled>Dodaj nową grupę:</button>
+		<button type="button" class="btn btn-outline-primary cursor-normal width-full" disabled>Edytuj grupę {{name}} :</button>
 	</div>
 </div>
 
@@ -11,7 +11,7 @@
 		  <div class="input-group-prepend">
 		    <span class="input-group-text">Nazwa: </span>
 		  </div>
-		  <input [(ngModel)]="name" type="text" class="form-control" placeholder="Nazwa">
+		  <input [(ngModel)]="group.name" type="text" class="form-control" >
 		</div>
 	</div>
 </div>
@@ -28,18 +28,18 @@
   [placeholder]="'Wybierz kontakty:'"
   [settings]="dropdownSettings"
   [data]="contactList"
-  [(ngModel)]="selectedContacts"
+  [(ngModel)]="contactsOfGroup"
   
-  (onSelect)="onItemSelect($event)"
-  (onSelectAll)="onSelectAll($event)"
 >
 </ng-multiselect-dropdown>
 </div>
 </div>
 
+
+
 <div class="row">
 	<div class="col-lg-12 mtop right">
-		<button type="button" class="btn btn-success" (click)="addGroup()">Dodaj</button>
-		<button type="button" class="btn btn-info" (click)="toGroups()">Wszystkie grupy</button>
+		<button type="button" class="btn btn-success" (click)="updateGroup()">Zapisz zmiany</button>
+		<button (click)="toGroupDetails()" type="button" class="btn btn-danger">Anuluj zmiany</button>
 	</div>
 </div>

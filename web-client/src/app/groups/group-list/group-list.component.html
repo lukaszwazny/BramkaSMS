@@ -1,1 +1,80 @@
-<p>group-list works!</p>
+<!--przyciski-->
+<div class="row">
+
+	<div class="col-lg-1 col-md-2 mtop">
+		<button type="button" class="btn btn-success" (click)="toGroupAdd()">Nowa</button>
+	</div>
+
+	<div class="col-lg-5 col-md-10 mtop">
+		<div class="input-group">
+		  <div class="input-group-prepend">
+		    <span class="input-group-text">Szukaj: </span>
+		  </div>
+		  <input #name type="text" class="form-control" placeholder="Nazwa" (input)="filter(name.value)">
+		</div>
+	</div>
+
+	<div class="col-lg-5 mtop">
+		<div class="input-group">
+		  <div class="input-group-prepend">
+		    <span class="input-group-text">Sortuj wg: </span>
+		  </div>
+		  <select #sorting class="custom-select" (input)="sort(sorting.value)">
+		    <option value="1">Nazwa rosnąco</option>
+		    <option value="2">Nazwa malejąco</option>
+		  </select>
+		</div>
+	</div>
+
+</div>
+<!--END przyciski-->
+
+<!--lista-->
+<div class="row">
+	<div class="col-md mtop">
+		<button type="button" class="btn btn-outline-primary cursor-normal width-full" disabled>Lista grup:</button>
+	<ul class="list-group mtop">
+	  <li class="list-group-item" *ngFor="let group of filteredGroups">
+
+	  	<div class="row" >
+		  	<div class="col-md-6">
+		  		<p>{{ group.name }}</p>
+		  	</div>
+		  	<div class="col-md-6">
+		  		<div class="right">
+			  		<button (click)="toGroupDetails(group.id)" type="button" class="btn btn-info">Szczegóły</button>
+			  		<button (click)="toGroupEdit(group.id)" type="button" class="btn btn-warning">Edytuj</button>
+			  		<button (click)="openModal(group)" type="button" class="btn btn-danger">Usuń</button>
+		  		</div>
+		  	</div>
+	  	</div>
+
+	  </li>
+
+	</ul>
+	</div>
+</div>
+<!--END lista-->
+
+<!-- Modal- po kliknięciu "usuń" -->
+<div #modal class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">UWAGA</h4>
+        <button (click)="closeModal()" type="button" class="close" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Czy na pewno chcesz usunąć grupę:</p>
+        <p><b>{{ groupToDelete.name }}</b></p>
+      </div>
+      <div class="modal-footer">
+        <button (click)="deleteGroup(groupToDelete.id)" type="button" class="btn btn-danger">Usuń</button>
+        <button (click)="closeModal()" type="button" class="btn btn-outline-primary">Nie usuwaj</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END modal -->

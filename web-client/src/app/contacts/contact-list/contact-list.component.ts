@@ -33,7 +33,7 @@ export class ContactListComponent implements OnInit {
 
   ngOnInit() {
   	this.contactsService
-  		.getContactList(this.name, this.surname, this.phone)
+  		.getContactList()
   		.subscribe(contact => this.contactList = contact);
 
     this.assignCopy();

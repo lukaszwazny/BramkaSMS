@@ -66,4 +66,4 @@ export class ContactDetailsComponent implements OnInit {
 	declarations: [ContactDetailsComponent],
 	imports: [CommonModule]
 })
-class ContactListModule{}
+class ContactDetailsModule{}

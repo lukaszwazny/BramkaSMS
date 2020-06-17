@@ -6,6 +6,7 @@ import {HomepageComponent} from './commons/homepage/homepage.component';
 import {GroupListComponent} from './groups/group-list/group-list.component';
 import {GroupAddComponent} from './groups/group-add/group-add.component';
 import {GroupDetailsComponent} from './groups/group-details/group-details.component';
+import {GroupEditComponent} from './groups/group-edit/group-edit.component';
 
 import {MessageListComponent} from './messages/message-list/message-list.component';
 import {MessageAddComponent} from './messages/message-add/message-add.component';
@@ -24,7 +25,8 @@ const routes: Routes = [
 	{path: 'groups', redirectTo: 'groups/list'},
 	{path: 'groups/list', component: GroupListComponent},
 	{path: 'groups/add', component: GroupAddComponent},
-	{path: 'groups/:id', component: GroupAddComponent},
+	{path: 'groups/:id', component: GroupDetailsComponent},
+	{path: 'groups/:id/edit', component: GroupEditComponent},
 
 	{path: 'messages', redirectTo: 'messages/list'},
 	{path: 'messages/list', component: MessageListComponent},
