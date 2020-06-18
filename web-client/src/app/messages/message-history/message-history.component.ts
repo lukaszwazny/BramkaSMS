@@ -33,17 +33,17 @@ export class MessageHistoryComponent implements OnInit {
 
   ngOnInit() {
   	this.messagesService
-  		.getMessagesList(true)
+  		.getMessagesList(true, 'sent')
   		.subscribe(message => this.messagesList = message);
 
     this.assignCopy();
 
     this.messagesService
-  		.getFirstDate()
+  		.getFirstDate('sent')
   		.subscribe(date => this.from = date);
 
   	this.messagesService
-  		.getLastDate()
+  		.getLastDate('sent')
   		.subscribe(date => this.to = date);
 
   }
@@ -57,7 +57,7 @@ export class MessageHistoryComponent implements OnInit {
   }
 
   toMessageDetails(id) {
-    this.router.navigate(['/messages/' + id]);
+    this.router.navigate(['/messageshistory/' + id]);
   }
 
   filter(receiver, content){
@@ -73,7 +73,7 @@ export class MessageHistoryComponent implements OnInit {
      this.setDate();
 
      this.sort(this.sorting.nativeElement.value);
- 
+
   }
 
   dynamicSort(property) {

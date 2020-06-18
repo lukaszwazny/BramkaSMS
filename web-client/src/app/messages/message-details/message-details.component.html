@@ -1,1 +1,49 @@
-<p>message-details works!</p>
+
+<div class="row">
+	<div class="col-lg-12 mtop">
+		<button type="button" class="btn btn-outline-primary cursor-normal width-full" disabled>Szczegóły wiadomoći:</button>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-12 col-md-12 mtop">
+		<div class="input-group">
+		  <div class="input-group-prepend">
+		    <span class="input-group-text">Odbiorca: </span>
+		  </div>
+		  <input type="text" class="form-control" value="{{receiver.name}}" disabled>
+		  <div class="right">
+				<button (click)="toRecieverDetails()" type="button" class="btn btn-info" *ngIf="receiver.id">Szczegóły odbiorcy</button>
+		  	</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-12 mtop">
+		<button type="button" class="btn btn-outline-primary cursor-normal width-full" disabled>Treść:</button>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-12 mtop right">
+		<textarea value="{{message.content}}" rows="10" class="form-control" disabled></textarea>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-6 mtop">
+	<div class="input-group">
+		<div class="input-group-prepend">
+		    <span class="input-group-text">Data wysłania: </span>
+		</div>
+		  <input value="{{message.date.toISOString().slice(0,16)}}" type="datetime-local" class="form-control" disabled>
+		</div>
+</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-12 mtop right">
+		<button type="button" class="btn btn-info" (click)="toMessageHistory()">Wszystkie wysłane wiadomości</button>
+	</div>
+</div>

@@ -33,7 +33,8 @@ const routes: Routes = [
 	{path: 'messages/list', component: MessageListComponent},
 	{path: 'messages/add', component: MessageAddComponent},
 	{path: 'messages/history', component: MessageHistoryComponent},
-	{path: 'messages/:id', component: MessageDetailsComponent},
+	{path: 'messageslist/:id', component: MessageDetailsComponent},
+	{path: 'messageshistory/:id', component: MessageDetailsComponent},
 
 	{path: 'contacts', redirectTo: 'contacts/list'},
 	{path: 'contacts/list', component: ContactListComponent},
