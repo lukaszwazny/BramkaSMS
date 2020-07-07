@@ -63,7 +63,7 @@ export class ContactEditComponent implements OnInit {
   }
 
   updateContact(){
-  	this.contact.phoneNumber = '+48' + this.contact.phoneNumber;
+  	//this.contact.phoneNumber = '+48' + this.contact.phoneNumber;
   	this.contactsService.updateContact(this.contact, this.groupsOfContact);
   	this.toContactDetails();
   }

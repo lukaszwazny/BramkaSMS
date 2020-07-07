@@ -1,5 +1,6 @@
 import { Component, OnInit, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {Observable} from 'rxjs';
 
 import {Contact} from '../../data/contacts/contact';
 import {ContactsService} from '../../services/contacts.service';
@@ -36,9 +37,11 @@ export class ContactListComponent implements OnInit {
   ngOnInit() {
   	this.contactsService
   		.getContactList()
-  		.subscribe(contact => this.contactList = contact);
+  		.subscribe(contact => {this.contactList = contact; console.log(this.contactList); this.assignCopy();});
 
-    this.assignCopy();
+
+
+    
 
   }
 

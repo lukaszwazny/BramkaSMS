@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import {HttpClient} from '@angular/common/http';
 
 import {Observable} from 'rxjs';
 import { of } from 'rxjs';
@@ -28,7 +29,7 @@ import {GroupsService} from './groups.service'
 })
 export class MessagesService {
 
-  constructor(private contactsService: ContactsService, private groupsService: GroupsService) { }
+  constructor(private http:HttpClient, private contactsService: ContactsService, private groupsService: GroupsService) { }
 
   getRawMessagesList(whatList: string): Observable<Message[]>{
 
