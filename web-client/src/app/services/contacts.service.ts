@@ -28,20 +28,6 @@ export class ContactsService {
   		return obsList;*/
 
       //z API
-      console.log('http://' 
-          + config.backendIP
-          + ':'
-          + config.backendPort
-          + '/api/users');
-      var contactList = this.http.get<Contact[]>
-        ('http://' 
-          + config.backendIP
-          + ':'
-          + config.backendPort
-          + '/api/users');
-      var elo;
-      //contactList.subscribe(contact => console.log(contact));
-      //console.log(contactList);
       return this.http.get<Contact[]>
         ('http://' 
           + config.backendIP
@@ -52,22 +38,56 @@ export class ContactsService {
 
   addContact(name, surname, phoneNumber, groupList){
   	console.log(name, surname, phoneNumber, groupList);
+    var contact : Contact = {
+      name: name,
+      surname: surname,
+      phone_number: phoneNumber
+    };
+    this.http.post<Contact>
+      ('http://'
+        + config.backendIP
+        + ':'
+        + config.backendPort
+        + '/api/users', contact);
   }
 
   deleteContact(id){
   	console.log('deleting '+ id);
+    this.http.delete<Contact>
+      ('http://'
+        + config.backendIP
+        + ':'
+        + config.backendPort
+        + '/api/users?id='
+        + id);
   }
 
   updateContact(contact : Contact, groups: Group[]){
   	//console.log('updating ' + contact.id + ' ' + contact.name + ' ' + //contact.surname + ' ' + contact.phoneNumber + ' ' + groups)
+    this.http.put<Contact>
+      ('http://'
+        + config.backendIP
+        + ':'
+        + config.backendPort
+        + '/api/users', contact);
+
   }
 
-  getContact(id) : any{
-  	//return Observable.of(contactList[Math.floor(Math.random() * contactList.length)])
+  getContact(id) : Observable<Contact>{
+  	//bez API
   	/*let contact:Contact = contactList[id-1];
   	console.log(id);
   	contact.fullData = contact.name + ' ' + contact.surname + ', ' + contact.phoneNumber;
   	return contact;*/
+
+    //z API
+    return this.http.get<Contact>
+        ('http://' 
+          + config.backendIP
+          + ':'
+          + config.backendPort
+          + '/api/user?id='
+          + id);
   }
 
   getContactGroups(id) : Group[] {

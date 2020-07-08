@@ -17,10 +17,17 @@ export class GroupsService {
   constructor() { }
 
    getGroupList() : Observable<Group[]> {
-  		//do podmiany, gdy będzie API
-  		let list : Group[] = groupList;
+  		//bez API
+  		/*let list : Group[] = groupList;
   		let obsList = of(list);
-  		return obsList;
+  		return obsList;*/
+
+      return this.http.get<Group[]>
+        ('http://'
+          + config.backendIP
+          + ':'
+          + config.backendPort
+          + '/api/groups');
   }
 
     getGroup(id) : Group{
@@ -28,18 +35,38 @@ export class GroupsService {
   	return groupList[id-1];
   }
 
-    addGroup(name, contactList : Contact[]){
+  addGroup(name, contactList : Contact[]){
   	console.log(name);
   	console.log(contactList);
+
+    var object = {
+      name: name
+    };
+
+    this.http.post<Object>
+      ('http://'
+        + config.backendIP
+        + ':'
+        + config.backendPort
+        + '/api/groups', object);
   }
 
   deleteGroup(id){
   	console.log('deleting '+ id);
+
+    this.http.delete<Group>
+      ('http://'
+        + config.backendIP
+        + ':'
+        + config.backendPort
+        + '/api/groups?id='
+        + id);
   }
 
   getGroupContacts(id) : Observable<Contact[]> {
+    //bez API
   	//returns random groups
-  	let randNrOfContacts  = Math.floor(Math.random() * 20);
+  	/*let randNrOfContacts  = Math.floor(Math.random() * 20);
   	let list = [];
   	for(let i = 0; i < randNrOfContacts; i++){
   		let randContact = contactList[Math.floor(Math.random() * contactList.length)];
@@ -47,11 +74,27 @@ export class GroupsService {
   		list.push(randContact);
   	}
   	let obsList = of(list);
-  	return obsList;
+  	return obsList;*/
+
+    //z API
+    return this.http.get<Contact[]>
+      ('http://'
+        + config.backendIP
+        + ':'
+        + config.backendPort
+        + '/api/group?id='
+        + id);
   }
 
 
   updateGroup(group: Group, contacts: Contact[]){
   	console.log('updating ' + group.id + ' ' + group.name + ' ' + contacts)
+  
+    this.http.put<Group>
+      ('http://'
+        + config.backendIP
+        + ':'
+        + config.backendPort
+        + '/api/groups', group);
   }
 }
