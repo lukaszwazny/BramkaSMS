@@ -17,6 +17,8 @@ import messageListWithName from '../../assets/MOCK_DATA_MESSAGES_NAME.json'
 import messageListWithGroup from '../../assets/MOCK_DATA_MESSAGES_GROUP.json'
 import messageListWithNumber from '../../assets/MOCK_DATA_MESSAGES_NUMBER.json'
 
+import config from '../../assets/config.json'
+
 import pendingMessageListWithName from '../../assets/MOCK_DATA_PENDING_MESSAGES_NAME.json'
 import pendingMessageListWithGroup from '../../assets/MOCK_DATA_PENDING_MESSAGES_GROUP.json'
 import pendingMessageListWithNumber from '../../assets/MOCK_DATA_PENDING_MESSAGES_NUMBER.json'
@@ -99,8 +101,11 @@ export class MessagesService {
   	return obsList;
   }
 
-  getMessagesList(shorten:boolean, whatList:string):Observable<MessageToShow[]>{
-  	let list:MessageToShow[] = [];
+  getMessagesList(shorten:boolean, whatList:string):any{
+  	
+
+    //bez API
+    /*let list:MessageToShow[] = [];
 
   	this.getRawMessagesList(whatList)
   		.subscribe(messages => list = messages.map(message => ({
@@ -112,7 +117,9 @@ export class MessagesService {
   										date: message.date.toISOString().slice(0,10),
   									})));
 
-  	return of(list);
+  	return of(list);*/
+
+
  	
   }
 
@@ -150,12 +157,62 @@ export class MessagesService {
 
   	if(contactList.length){
   		console.log(contactList);
+
+      contactList.foreach(contact => {
+
+        var message : Object = {
+          user_id: contact.id,
+          text: content
+        }
+
+        this.http.post<Object>
+          ('http://'
+            + config.backendIP
+            + ':'
+            + config.backendPort
+            + '/api/send_user', message);
+
+      });
+
   	}
   	if(groupList.length){
   		console.log(groupList);
+
+      groupList.foreach(group => {
+
+        var message : Object = {
+          group_id: group.id,
+          text: content
+        }
+
+        this.http.post<Object>
+          ('http://'
+            + config.backendIP
+            + ':'
+            + config.backendPort
+            + '/api/send_group', message);
+
+      });
   	}
+
   	if(numberList.length){
   		console.log(numberList);
+      numberList.foreach(number => {
+
+        var message : Object = {
+          phone_number: number,
+          text: content
+        }
+
+        this.http.post<Object>
+          ('http://'
+            + config.backendIP
+            + ':'
+            + config.backendPort
+            + '/api/send_number', message);
+
+      });
+      
   	}
 
   	console.log(content);

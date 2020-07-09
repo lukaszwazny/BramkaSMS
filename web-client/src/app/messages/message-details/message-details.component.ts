@@ -23,6 +23,7 @@ export class MessageDetailsComponent implements OnInit {
 	message: Message;
 	receiver = {id:null, name:null};
 
+
   constructor(private groupsService:GroupsService, private contactsService: ContactsService, private messagesService: MessagesService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
@@ -32,28 +33,37 @@ export class MessageDetailsComponent implements OnInit {
 
   	whatList = whatList == 'messageslist' ? 'pending' : 'sent';
 
-  	this.messagesService.getRawMessage(whatList, id).subscribe(message => this.message = message);
+  	this.messagesService.getRawMessage(whatList, id).subscribe(message => {
+      this.message = message;
 
-  	if(this.message.userId){
-  		this.receiver = {
-  			id: this.message.userId,
-  			name: this.contactsService.getContact(this.message.userId).fullData
-  		}
-  	}
+      if(this.message.userId){
 
-  	if(this.message.groupId){
-  		this.receiver = {
-  			id: this.message.groupId,
-  			name: this.groupsService.getGroup(this.message.groupId).name
-  		}
-  	}
+      this.contactsService.getContact(this.message.userId)
+        .subscribe(contact => {
+          this.receiver = {
+            id: this.message.userId,
+            name: contact.name + ' ' + contact.surname + ', ' + contact.phone_number
+          }
+        })
 
-  	if(this.message.sentToNumber){
-  		this.receiver = {
-  			id: null,
-  			name: this.message.sentToNumber
-  		}
-  	}
+    }
+
+    if(this.message.groupId){
+      this.receiver = {
+        id: this.message.groupId,
+        name: this.groupsService.getGroup(this.message.groupId).name
+      }
+    }
+
+    if(this.message.sentToNumber){
+      this.receiver = {
+        id: null,
+        name: this.message.sentToNumber
+      }
+    }
+    });
+
+  	
 
   	console.log(this.receiver.id);
   		

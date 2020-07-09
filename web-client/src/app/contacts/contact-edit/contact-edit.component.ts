@@ -1,6 +1,8 @@
 import { Component, OnInit, NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import {Observable} from 'rxjs';
+
 import {Contact} from '../../data/contacts/contact';
 import {Group} from '../../data/groups/group';
 import {ContactsService} from '../../services/contacts.service';
@@ -34,9 +36,9 @@ export class ContactEditComponent implements OnInit {
 
   ngOnInit(): void {
   	let id = this.route.snapshot.paramMap.get('id');
-    //this.contactsService.getContact(id)
-    //    .subscribe(contact => this.contact = contact);
-    this.contact = this.contactsService.getContact(id);
+    this.contactsService.getContact(id)
+        .subscribe(contact => this.contact = contact);
+    //this.contact = this.contactsService.getContact(id);
     this.groupsOfContact = this.contactsService.getContactGroups(id);
     this.groupsService
   		.getGroupList()
@@ -64,6 +66,7 @@ export class ContactEditComponent implements OnInit {
 
   updateContact(){
   	//this.contact.phoneNumber = '+48' + this.contact.phoneNumber;
+
   	this.contactsService.updateContact(this.contact, this.groupsOfContact);
   	this.toContactDetails();
   }

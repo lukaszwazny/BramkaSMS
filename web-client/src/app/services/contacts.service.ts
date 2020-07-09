@@ -38,12 +38,12 @@ export class ContactsService {
 
   addContact(name, surname, phoneNumber, groupList){
   	console.log(name, surname, phoneNumber, groupList);
-    var contact : Contact = {
+    var contact : Object = {
       name: name,
       surname: surname,
       phone_number: phoneNumber
     };
-    this.http.post<Contact>
+    this.http.post<Object>
       ('http://'
         + config.backendIP
         + ':'

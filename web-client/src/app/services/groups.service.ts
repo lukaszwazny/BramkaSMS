@@ -9,12 +9,14 @@ import {Contact} from '../data/contacts/contact';
 import groupList from '../../assets/MOCK_DATA_GROUPS.json'
 import contactList from '../../assets/MOCK_DATA_CONTACS.json'
 
+import config from '../../assets/config.json'
+
 @Injectable({
   providedIn: 'root'
 })
 export class GroupsService {
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
    getGroupList() : Observable<Group[]> {
   		//bez API
