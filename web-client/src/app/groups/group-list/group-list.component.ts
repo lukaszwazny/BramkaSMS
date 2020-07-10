@@ -34,7 +34,7 @@ export class GroupListComponent implements OnInit {
   ngOnInit() {
   	this.groupsService
   		.getGroupList()
-  		.subscribe(group => this.groupList = group);
+  		.subscribe(group => {this.groupList = group; this.assignCopy()});
 
     this.assignCopy();
 

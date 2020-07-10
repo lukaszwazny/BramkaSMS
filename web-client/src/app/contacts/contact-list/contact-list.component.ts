@@ -145,11 +145,11 @@ export class ContactListComponent implements OnInit {
       break;
 
     case '5':
-    this.filteredContacts.sort(this.dynamicSort("phoneNumber")); 
+    this.filteredContacts.sort(this.dynamicSort("phone_number")); 
       break;
 
     case '6': 
-    this.filteredContacts.sort(this.dynamicSort("-phoneNumber"));
+    this.filteredContacts.sort(this.dynamicSort("-phone_number"));
       break;   
   }
 

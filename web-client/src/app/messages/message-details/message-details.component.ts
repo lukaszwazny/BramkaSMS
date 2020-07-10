@@ -36,29 +36,33 @@ export class MessageDetailsComponent implements OnInit {
   	this.messagesService.getRawMessage(whatList, id).subscribe(message => {
       this.message = message;
 
-      if(this.message.userId){
+      if(this.message.user_id){
 
-      this.contactsService.getContact(this.message.userId)
+      this.contactsService.getContact(this.message.user_id)
         .subscribe(contact => {
           this.receiver = {
-            id: this.message.userId,
+            id: this.message.user_id,
             name: contact.name + ' ' + contact.surname + ', ' + contact.phone_number
           }
         })
 
     }
 
-    if(this.message.groupId){
-      this.receiver = {
-        id: this.message.groupId,
-        name: this.groupsService.getGroup(this.message.groupId).name
-      }
+    if(this.message.group_id){
+
+      this.groupsService.getGroup(this.message.group_id)
+        .subscribe(group => {
+          this.receiver = {
+            id: this.message.group_id,
+            name: group.group_name
+          }
+        })
     }
 
-    if(this.message.sentToNumber){
+    if(this.message.phone_number){
       this.receiver = {
         id: null,
-        name: this.message.sentToNumber
+        name: this.message.phone_number
       }
     }
     });
@@ -74,9 +78,9 @@ export class MessageDetailsComponent implements OnInit {
   }
 
   toRecieverDetails(){
-  	if(this.message.userId)
+  	if(this.message.user_id)
   		this.router.navigate(['/contacts/' + this.receiver.id]);
-  	if(this.message.groupId)
+  	if(this.message.group_id)
   		this.router.navigate(['/groups/' + this.receiver.id]);
   }
 

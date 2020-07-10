@@ -1,8 +1,8 @@
 export class Message {
 	id: number;
-	groupId?: number;
-	userId?: number;
-	sentToNumber?: string;
-	content?: string;
-	date: Date;
+	group_id?: number;
+	user_id?: number;
+	phone_number?: string;
+	text?: string;
+	timestamp: string;
 }

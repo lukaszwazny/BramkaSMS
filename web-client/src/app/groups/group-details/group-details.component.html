@@ -11,7 +11,7 @@
 		  <div class="input-group-prepend">
 		    <span class="input-group-text">Nazwa: </span>
 		  </div>
-		  <input type="text" class="form-control" value="{{group.name}}" disabled>
+		  <input type="text" class="form-control" value="{{group.group_name}}" disabled>
 		</div>
 	</div>
 </div>
@@ -65,7 +65,7 @@
       </div>
       <div class="modal-body">
         <p>Czy na pewno chcesz usunąć grupę:</p>
-        <p><b>{{ group.name }}</b></p>
+        <p><b>{{ group.group_name }}</b></p>
       </div>
       <div class="modal-footer">
         <button (click)="deleteGroup()" type="button" class="btn btn-danger">Usuń</button>

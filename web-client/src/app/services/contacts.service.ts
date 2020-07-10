@@ -38,17 +38,21 @@ export class ContactsService {
 
   addContact(name, surname, phoneNumber, groupList){
   	console.log(name, surname, phoneNumber, groupList);
-    var contact : Object = {
-      name: name,
-      surname: surname,
-      phone_number: phoneNumber
+    var contact = {
+      "name": name,
+      "surname": surname,
+      "phone_number": phoneNumber,
+      "group_id": 0
     };
-    this.http.post<Object>
+    
+    this.http.post<any>
       ('http://'
         + config.backendIP
         + ':'
         + config.backendPort
-        + '/api/users', contact);
+        + '/api/users', contact)
+        .subscribe(data => console.log(data));
+    console.log(contact);
   }
 
   deleteContact(id){
@@ -59,7 +63,8 @@ export class ContactsService {
         + ':'
         + config.backendPort
         + '/api/users?id='
-        + id);
+        + id)
+      .subscribe(data => console.log(data));
   }
 
   updateContact(contact : Contact, groups: Group[]){
@@ -69,7 +74,8 @@ export class ContactsService {
         + config.backendIP
         + ':'
         + config.backendPort
-        + '/api/users', contact);
+        + '/api/users', contact)
+        .subscribe(data => console.log(data));
 
   }
 

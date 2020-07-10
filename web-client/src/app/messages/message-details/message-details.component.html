@@ -27,7 +27,7 @@
 
 <div class="row">
 	<div class="col-lg-12 mtop right">
-		<textarea value="{{message.content}}" rows="10" class="form-control" disabled></textarea>
+		<textarea value="{{message.text}}" rows="10" class="form-control" disabled></textarea>
 	</div>
 </div>
 
@@ -37,7 +37,7 @@
 		<div class="input-group-prepend">
 		    <span class="input-group-text">Data wysłania: </span>
 		</div>
-		  <input value="{{message.date.toISOString().slice(0,16)}}" type="datetime-local" class="form-control" disabled>
+		  <input value="{{message.timestamp.slice(0,16)}}" type="datetime-local" class="form-control" disabled>
 		</div>
 </div>
 </div>

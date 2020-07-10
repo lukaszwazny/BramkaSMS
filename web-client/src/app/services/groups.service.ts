@@ -24,6 +24,8 @@ export class GroupsService {
   		let obsList = of(list);
   		return obsList;*/
 
+      console.log("siemanko w mojej kuchni")
+
       return this.http.get<Group[]>
         ('http://'
           + config.backendIP
@@ -32,9 +34,21 @@ export class GroupsService {
           + '/api/groups');
   }
 
-    getGroup(id) : Group{
+    getGroup(id) : Observable<Group>{
+    //bez API
   	//return Observable.of(contactList[Math.floor(Math.random() * contactList.length)])
-  	return groupList[id-1];
+  	//return groupList[id-1];
+
+    console.log(id);
+    //z API
+    return this.http.get<Group>
+        ('http://'
+          + config.backendIP
+          + ':'
+          + config.backendPort
+          + '/api/group?id='
+          + id);
+
   }
 
   addGroup(name, contactList : Contact[]){
@@ -50,7 +64,8 @@ export class GroupsService {
         + config.backendIP
         + ':'
         + config.backendPort
-        + '/api/groups', object);
+        + '/api/groups', object)
+      .subscribe(data => console.log(data));
   }
 
   deleteGroup(id){
@@ -84,19 +99,20 @@ export class GroupsService {
         + config.backendIP
         + ':'
         + config.backendPort
-        + '/api/group?id='
+        + '/api/group/users?id='
         + id);
   }
 
 
   updateGroup(group: Group, contacts: Contact[]){
-  	console.log('updating ' + group.id + ' ' + group.name + ' ' + contacts)
+  	console.log('updating ' + group.group_id + ' ' + group.group_name + ' ' + contacts)
   
     this.http.put<Group>
       ('http://'
         + config.backendIP
         + ':'
         + config.backendPort
-        + '/api/groups', group);
+        + '/api/groups', group)
+    .subscribe(data => console.log(data));
   }
 }

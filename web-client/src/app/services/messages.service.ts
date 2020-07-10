@@ -35,7 +35,8 @@ export class MessagesService {
 
   getRawMessagesList(whatList: string): Observable<Message[]>{
 
-  	let list1, list2, list3, list : Message[];
+    //bez API
+  	/*let list1, list2, list3, list : Message[];
 
   	if(whatList == 'sent'){
   		list1 = messageListWithName.map(
@@ -98,29 +99,61 @@ export class MessagesService {
   	list = list1.concat(list2).concat(list3);
 
   	let obsList = of(list);
-  	return obsList;
+  	return obsList;*/
+
+    //z API
+    return this.http.get<Message[]>
+        ('http://' 
+          + config.backendIP
+          + ':'
+          + config.backendPort
+          + '/api/history?id=1');
   }
 
-  getMessagesList(shorten:boolean, whatList:string):any{
+  getMessagesList(shorten:boolean, whatList:string):MessageToShow[]{
   	
 
     //bez API
-    /*let list:MessageToShow[] = [];
+    let list:MessageToShow[] = [];
 
   	this.getRawMessagesList(whatList)
-  		.subscribe(messages => list = messages.map(message => ({
+  		.subscribe(messages => {list = messages.map(message => ({
   										id: message.id,
-  										receiver: (message.userId != null ? (this.contactsService.getContact(message.userId).fullData) : 
-  													(message.groupId != null ? this.groupsService.getGroup(message.groupId).name : 
-  													(message.sentToNumber) )),
-  										content: (shorten ? (message.content.slice(0,200) + '...') : message.content),
-  										date: message.date.toISOString().slice(0,10),
-  									})));
+  										receiver: (message.user_id != null) ? ("u" + message.user_id) : 
+                        (message.group_id != null ? ("g" + message.group_id ): 
+                            (message.phone_number)),
+  										content: (shorten ? (message.text.slice(0,200) + '...') : message.text),
+  										date: message.timestamp.slice(0,10),
+  		}));
+      console.log(list, messages, "a dziendobry");
 
-  	return of(list);*/
+      list.forEach(message => {
+
+      if(message.receiver[0] == "u"){
+        this.contactsService.getContact(parseInt(message.receiver.slice(1)))
+          .subscribe(contact => 
+            message.receiver = contact.name + " " + contact.surname + ", " + contact.phone_number)
+      }
+      if(message.receiver[0] == "g"){
+        this.groupsService.getGroup(parseInt(message.receiver.slice(1)))
+          .subscribe(group =>
+            message.receiver = group.group_name)
+
+      }
+                            
+      })
+
+      console.log(list, "+1");
+
+      return list;
+
+      console.log("elo320");
+
+      });
 
 
- 	
+  	return null;
+
   }
 
   getRawMessage(whatList, id):Observable<Message>{
@@ -135,7 +168,7 @@ export class MessagesService {
   	let dates = [];
 
   	this.getRawMessagesList(whatList)
-  		.subscribe(messages => dates = messages.map(message => message.date));
+  		.subscribe(messages => dates = messages.map(message => message.timestamp));
 
   	let firstDate = new Date(Math.min.apply(null, dates));
 
@@ -146,7 +179,7 @@ export class MessagesService {
   	let dates = [];
 
   	this.getRawMessagesList(whatList)
-  		.subscribe(messages => dates = messages.map(message => message.date));
+  		.subscribe(messages => dates = messages.map(message => message.timestamp));
 
   	let lastDate = new Date(Math.max.apply(null, dates));
 
@@ -197,7 +230,7 @@ export class MessagesService {
 
   	if(numberList.length){
   		console.log(numberList);
-      numberList.foreach(number => {
+      numberList.forEach(number => {
 
         var message : Object = {
           phone_number: number,
@@ -209,7 +242,8 @@ export class MessagesService {
             + config.backendIP
             + ':'
             + config.backendPort
-            + '/api/send_number', message);
+            + '/api/send_number', message)
+            .subscribe(data => console.log(data));
 
       });
       

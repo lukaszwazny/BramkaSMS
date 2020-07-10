@@ -25,9 +25,9 @@ export class GroupDetailsComponent implements OnInit {
 
   ngOnInit() {
   	let id = this.route.snapshot.paramMap.get('id');
-    //this.contactsService.getContact(id)
-    //    .subscribe(contact => this.contact = contact);
-    this.group = this.groupsService.getGroup(id);
+    this.groupsService.getGroup(id)
+        .subscribe(group => {this.group = group; console.log(this.group)});
+    //this.group = this.groupsService.getGroup(id);
 
     this.groupsService
   		.getGroupContacts(id)
@@ -40,7 +40,7 @@ export class GroupDetailsComponent implements OnInit {
   }
 
   toGroupEdit() {
-    this.router.navigate(['/groups/' + this.group.id + '/edit']);
+    this.router.navigate(['/groups/' + this.group.group_id + '/edit']);
   }
 
   toGroups() {
@@ -48,7 +48,7 @@ export class GroupDetailsComponent implements OnInit {
   }
 
   deleteGroup(){
-  	this.groupsService.deleteGroup(this.group.id);
+  	this.groupsService.deleteGroup(this.group.group_id);
   	this.router.navigate(['/groups']);
   	this.closeModal();
   }

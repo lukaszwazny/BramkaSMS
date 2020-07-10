@@ -33,9 +33,9 @@ export class GroupEditComponent implements OnInit {
 
   ngOnInit(): void {
   	let id = this.route.snapshot.paramMap.get('id');
-    //this.contactsService.getContact(id)
-    //    .subscribe(contact => this.contact = contact);
-    this.group = this.groupsService.getGroup(id);
+    this.groupsService.getGroup(id)
+        .subscribe(group => this.group = group);
+    //this.group = this.groupsService.getGroup(id);
 
     this.groupsService
   		.getGroupContacts(id)
@@ -45,7 +45,7 @@ export class GroupEditComponent implements OnInit {
   		.getContactList()
   		.subscribe(contact => this.contactList = contact);
 
-  	this.name = this.group.name;
+  	this.name = this.group.group_name;
 
   	this.dropdownSettings = {
       singleSelection: false,
@@ -61,7 +61,7 @@ export class GroupEditComponent implements OnInit {
   }
 
   toGroupDetails() {
-    this.router.navigate(['/groups/' + this.group.id]);
+    this.router.navigate(['/groups/' + this.group.group_id]);
   }
 
   updateGroup(){
