@@ -34,15 +34,23 @@ export class MessageHistoryComponent implements OnInit {
   ngOnInit() {
   	this.messagesService
   		.getMessagesList(true, 'sent')
-  		.subscribe(message => {this.messagesList = message; this.assignCopy(); console.log(this.messagesList, "siemanko w mojej kuchni")});
+  		.subscribe(message => {
+        this.messagesList = message; 
+        this.assignCopy(); 
+        console.log(this.messagesList, "siemanko w mojej kuchni");
+        this.messagesService
+          .getFirstDate('sent')
+          .subscribe(date => {
+            this.from = date; console.log(date)
+            this.messagesService
+              .getLastDate('sent')
+              .subscribe(date => this.to = date);
+          });
+      });
 
-    this.messagesService
-  		.getFirstDate('sent')
-  		.subscribe(date => this.from = date);
+    
 
-  	this.messagesService
-  		.getLastDate('sent')
-  		.subscribe(date => this.to = date);
+  	
 
   }
 

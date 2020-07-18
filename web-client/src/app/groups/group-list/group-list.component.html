@@ -68,10 +68,10 @@
       </div>
       <div class="modal-body">
         <p>Czy na pewno chcesz usunąć grupę:</p>
-        <p><b>{{ groupToDelete.group_name }}</b></p>
+        <p><b>{{ groupToDelete.name }}</b></p>
       </div>
       <div class="modal-footer">
-        <button (click)="deleteGroup(groupToDelete.group_id)" type="button" class="btn btn-danger">Usuń</button>
+        <button (click)="deleteGroup(groupToDelete.id)" type="button" class="btn btn-danger">Usuń</button>
         <button (click)="closeModal()" type="button" class="btn btn-outline-primary">Nie usuwaj</button>
       </div>
     </div>

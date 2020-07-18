@@ -26,9 +26,13 @@ export class ContactDetailsComponent implements OnInit {
   ngOnInit() {
   	let id = this.route.snapshot.paramMap.get('id');
     this.contactsService.getContact(id)
-        .subscribe(contact => this.contact = contact);
+        .subscribe(contact => {
+          this.contact = contact;
+          this.contactsService.getContactGroups(id)
+            .subscribe(groups => this.groupsOfContact = groups);
+        });
     //this.contact = this.contactsService.getContact(id);
-    this.groupsOfContact = this.contactsService.getContactGroups(id);
+    
   }
 
   toGroupDetails(id){

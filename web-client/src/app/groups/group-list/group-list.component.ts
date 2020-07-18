@@ -57,12 +57,17 @@ export class GroupListComponent implements OnInit {
   }
 
   deleteGroup(id){
-  	this.groupsService.deleteGroup(id);
-  	this.ngOnInit();
-  	this.closeModal();
+  	this.groupsService.deleteGroup(id)
+      .subscribe(data =>{
+        console.log(data);
+        this.ngOnInit();
+        this.closeModal();
+      });
+  	
   }
 
   openModal(group: Group){
+  console.log(group);
   	this.groupToDelete = group;
   	this.renderer.addClass(this.modal.nativeElement, 'show');
   	this.renderer.setStyle(this.modal.nativeElement, 'display', 'block');

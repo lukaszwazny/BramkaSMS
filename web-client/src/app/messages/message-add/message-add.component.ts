@@ -50,7 +50,12 @@ export class MessageAddComponent implements OnInit {
 
   	this.groupsService
   		.getGroupList()
-  		.subscribe(group => this.groupList = group);
+  		.subscribe(group => {
+        this.groupList = group;
+        this.contactsService
+          .getContactList()
+          .subscribe(contact => this.contactList = contact);
+      });
 
   	this.dropdownSettingsGroups = {
       singleSelection: false,
@@ -63,10 +68,6 @@ export class MessageAddComponent implements OnInit {
       allowSearchFilter: true,
       noDataAvailablePlaceholderText: 'Brak grup'
     };
-
-  	this.contactsService
-  		.getContactList()
-  		.subscribe(contact => this.contactList = contact);
 
   	this.dropdownSettingsContacts = {
       singleSelection: false,
@@ -105,9 +106,12 @@ export class MessageAddComponent implements OnInit {
   									this.selectedGroups.map(group => group.id), 
   									this.numberList, 
   									this.content, 
-  									this.immediately ? new Date() : new Date(this.date));
+  									this.immediately ? new Date() : new Date(this.date))
+        .subscribe( elo => {
+          if(elo)
+            this.router.navigate(['/messages/history']);
+        });
 
-  	this.router.navigate(['/messages']);
 
   }
 

@@ -37,7 +37,7 @@
 		<div class="input-group-prepend">
 		    <span class="input-group-text">Data wysłania: </span>
 		</div>
-		  <input value="{{message.timestamp.slice(0,16)}}" type="datetime-local" class="form-control" disabled>
+		  <input value="{{message.timestamp.replace(' ', 'T')}}" type="datetime-local" class="form-control" disabled>
 		</div>
 </div>
 </div>

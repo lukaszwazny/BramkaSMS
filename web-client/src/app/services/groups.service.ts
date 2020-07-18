@@ -51,7 +51,7 @@ export class GroupsService {
 
   }
 
-  addGroup(name, contactList : Contact[]){
+  addGroup(name){
   	console.log(name);
   	console.log(contactList);
 
@@ -59,19 +59,18 @@ export class GroupsService {
       name: name
     };
 
-    this.http.post<Object>
+    return this.http.post<Object>
       ('http://'
         + config.backendIP
         + ':'
         + config.backendPort
-        + '/api/groups', object)
-      .subscribe(data => console.log(data));
+        + '/api/groups', object);
   }
 
   deleteGroup(id){
   	console.log('deleting '+ id);
 
-    this.http.delete<Group>
+    return this.http.delete<Group>
       ('http://'
         + config.backendIP
         + ':'
@@ -104,15 +103,17 @@ export class GroupsService {
   }
 
 
-  updateGroup(group: Group, contacts: Contact[]){
-  	console.log('updating ' + group.group_id + ' ' + group.group_name + ' ' + contacts)
+  updateGroup(id, name){
+  	console.log('updating ' + id + ' ' + name)
   
-    this.http.put<Group>
+    return this.http.put<Group>
       ('http://'
         + config.backendIP
         + ':'
         + config.backendPort
-        + '/api/groups', group)
-    .subscribe(data => console.log(data));
+        + '/api/groups', {
+          "id":id,
+          "name": name
+        });
   }
 }

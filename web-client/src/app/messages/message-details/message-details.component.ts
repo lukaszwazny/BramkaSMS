@@ -36,35 +36,36 @@ export class MessageDetailsComponent implements OnInit {
   	this.messagesService.getRawMessage(whatList, id).subscribe(message => {
       this.message = message;
 
-      if(this.message.user_id){
+      if(this.message.user_id != 0){
 
       this.contactsService.getContact(this.message.user_id)
         .subscribe(contact => {
           this.receiver = {
-            id: this.message.user_id,
-            name: contact.name + ' ' + contact.surname + ', ' + contact.phone_number
+            id: contact ? this.message.user_id : null,
+            name: contact ? (contact.name + ' ' + contact.surname + ', ' + contact.phone_number) : "kontakt usunięty"
           }
+          console.log(this.receiver);
         })
 
-    }
-
-    if(this.message.group_id){
-
-      this.groupsService.getGroup(this.message.group_id)
-        .subscribe(group => {
-          this.receiver = {
-            id: this.message.group_id,
-            name: group.group_name
-          }
-        })
-    }
-
-    if(this.message.phone_number){
-      this.receiver = {
-        id: null,
-        name: this.message.phone_number
       }
-    }
+
+      if(this.message.group_id != 0){
+
+        this.groupsService.getGroup(this.message.group_id)
+          .subscribe(group => {
+            this.receiver = {
+              id: group ? this.message.group_id : null,
+              name: group ? group.name : "grupa usunięta"
+            }
+          })
+      }
+
+      if(this.message.phone_number != ""){
+        this.receiver = {
+          id: null,
+          name: this.message.phone_number
+        }
+      }
     });
 
   	

@@ -1,7 +1,0 @@
-{
-  "/api/*": {
-    "target": "http://93.95.92.21:8040",
-    "secure": false,
-    "logLevel": "debug"
-  }
-}

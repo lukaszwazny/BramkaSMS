@@ -15,7 +15,7 @@ import {ViewChild} from '@angular/core'
 })
 export class GroupDetailsComponent implements OnInit {
 
-  group : Group;
+  group;
   contactsOfGroup: Contact[];
 
   @ViewChild('modal') modal;
@@ -26,12 +26,14 @@ export class GroupDetailsComponent implements OnInit {
   ngOnInit() {
   	let id = this.route.snapshot.paramMap.get('id');
     this.groupsService.getGroup(id)
-        .subscribe(group => {this.group = group; console.log(this.group)});
-    //this.group = this.groupsService.getGroup(id);
+        .subscribe(group => {
+          this.group = group; 
+          console.log(this.group);
 
-    this.groupsService
-  		.getGroupContacts(id)
-  		.subscribe(contact => this.contactsOfGroup = contact);
+          this.groupsService.getGroupContacts(id)
+            .subscribe(contacts => this.contactsOfGroup = contacts);
+        });
+    //this.group = this.groupsService.getGroup(id);
 
   }
 
@@ -48,9 +50,13 @@ export class GroupDetailsComponent implements OnInit {
   }
 
   deleteGroup(){
-  	this.groupsService.deleteGroup(this.group.group_id);
-  	this.router.navigate(['/groups']);
-  	this.closeModal();
+  	this.groupsService.deleteGroup(this.group.group_id)
+      .subscribe(data => {
+        console.log(data);
+        this.router.navigate(['/groups']);
+      });
+  	
+  	//this.closeModal();
   }
 
   openModal(){

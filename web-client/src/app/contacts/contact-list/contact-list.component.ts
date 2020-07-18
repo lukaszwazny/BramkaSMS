@@ -62,9 +62,12 @@ export class ContactListComponent implements OnInit {
   }
 
   deleteContact(id){
-  	this.contactsService.deleteContact(id);
-  	this.ngOnInit();
-  	this.closeModal();
+  	this.contactsService.deleteContact(id)
+      .subscribe(data => {
+        console.log(data);
+        this.closeModal();
+        this.ngOnInit(); 
+      })
   }
 
   openModal(contact: Contact){

@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 
 import {Observable} from 'rxjs';
 import { of } from 'rxjs';
+import { Subject } from 'rxjs';
 
 import {Group} from '../data/groups/group';
 import {Contact} from '../data/contacts/contact';
@@ -110,24 +111,62 @@ export class MessagesService {
           + '/api/history?id=1');
   }
 
-  getMessagesList(shorten:boolean, whatList:string):MessageToShow[]{
+  handleReceiverChange(i, list, subject){
+    if(i < list.length){
+    console.log("before",list[i]);
+      if(list[i].receiver[0] == "u"){
+          this.contactsService.getContact(parseInt(list[i].receiver.slice(1)))
+            .subscribe(contact => {
+                console.log("afterContact", contact);
+                if(contact)
+                  list[i].receiver = contact.name + " " + contact.surname + ", " + contact.phone_number;
+                else
+                  list[i].receiver = "kontakt usunięty"
+                console.log("after", list[i]);
+                this.handleReceiverChange(i+1, list, subject);
+              });
+      }
+      if(list[i].receiver[0] == "g"){
+          this.groupsService.getGroup(parseInt(list[i].receiver.slice(1)))
+            .subscribe(group => {
+                if(group)
+                  list[i].receiver = group.name;
+                else
+                  list[i].receiver = "grupa usunięta"
+                console.log("after", list[i]);
+                this.handleReceiverChange(i+1, list, subject);
+              });
+      }
+      if(list[i].receiver[0] == "+"){
+          this.handleReceiverChange(i+1, list, subject);
+      }
+    }else{
+      subject.next(list);
+    }
+  }
+
+  getMessagesList(shorten:boolean, whatList:string):Observable<MessageToShow[]>{
   	
 
-    //bez API
     let list:MessageToShow[] = [];
 
+    var subject = new Subject<MessageToShow[]>();
+
   	this.getRawMessagesList(whatList)
-  		.subscribe(messages => {list = messages.map(message => ({
+  		.subscribe(messages => {
+
+      list = messages.map(message => ({
   										id: message.id,
-  										receiver: (message.user_id != null) ? ("u" + message.user_id) : 
-                        (message.group_id != null ? ("g" + message.group_id ): 
+  										receiver: (message.user_id != 0) ? ("u" + message.user_id) : 
+                        (message.group_id != 0 ? ("g" + message.group_id ): 
                             (message.phone_number)),
   										content: (shorten ? (message.text.slice(0,200) + '...') : message.text),
   										date: message.timestamp.slice(0,10),
   		}));
+
       console.log(list, messages, "a dziendobry");
 
-      list.forEach(message => {
+      /*list.forEach(message => {
 
       if(message.receiver[0] == "u"){
         this.contactsService.getContact(parseInt(message.receiver.slice(1)))
@@ -137,58 +176,86 @@ export class MessagesService {
       if(message.receiver[0] == "g"){
         this.groupsService.getGroup(parseInt(message.receiver.slice(1)))
           .subscribe(group =>
-            message.receiver = group.group_name)
+            message.receiver = group.name)
 
       }
                             
-      })
+      })*/
 
-      console.log(list, "+1");
+      this.handleReceiverChange(0, list, subject);
 
-      return list;
+      //console.log(list, "+1");
 
-      console.log("elo320");
+      //subject.next(list);
+
+      //console.log("elo320");
 
       });
 
 
-  	return null;
+  	return subject.asObservable();
 
   }
 
   getRawMessage(whatList, id):Observable<Message>{
-  	let list:Message[] = [];
+    //bez API
+  	/*let list:Message[] = [];
+    var subject = new Subject<Date>();
 
-  	this.getRawMessagesList(whatList).subscribe(messages => list = messages);
+  	this.getRawMessagesList(whatList).subscribe(messages => {
+      list = messages;
 
-  	return of(list[id-1]);
+    });
+
+  	return of(list[id-1]);*/
+
+    //z API
+    return this.http.get<Message>
+        ('http://' 
+          + config.backendIP
+          + ':'
+          + config.backendPort
+          + '/api/history_element?id='
+          + id);
   }
 
   getFirstDate(whatList:string):Observable<Date>{
+
   	let dates = [];
+    var subject = new Subject<Date>();
 
   	this.getRawMessagesList(whatList)
-  		.subscribe(messages => dates = messages.map(message => message.timestamp));
+  		.subscribe(messages => {
+        dates = messages.map(message => message.timestamp);
+        //console.log("daty", dates, typeof dates[0]);
+        //console.log(new Date(Math.min.apply(null, dates.map(e => new Date(e)))));
+        let firstDate = new Date(Math.min.apply(null, dates.map(e => new Date(e))));
+        subject.next(firstDate);
+      });
 
-  	let firstDate = new Date(Math.min.apply(null, dates));
-
-  	return of(firstDate);
+  	return subject.asObservable();
   }
 
   getLastDate(whatList:string):Observable<Date>{
   	let dates = [];
 
+    var subject = new Subject<Date>();
+
   	this.getRawMessagesList(whatList)
-  		.subscribe(messages => dates = messages.map(message => message.timestamp));
+  		.subscribe(messages => {
+        dates = messages.map(message => message.timestamp);
+        let lastDate = new Date(Math.max.apply(null, dates.map(e => new Date(e))));
+        subject.next(lastDate);
+      });
 
-  	let lastDate = new Date(Math.max.apply(null, dates));
+  	
 
-  	return of(lastDate);
+  	return subject.asObservable();
   }
 
-  sendMessage(contactList, groupList, numberList, content, date){
+  sendMessage(contactList, groupList, numberList, content, date) : Observable<boolean>{
 
-  	if(contactList.length){
+  	/*if(contactList.length){
   		console.log(contactList);
 
       contactList.foreach(contact => {
@@ -247,10 +314,102 @@ export class MessagesService {
 
       });
       
-  	}
+  	}*/
 
-  	console.log(content);
-  	console.log(date);
+    console.log(contactList, groupList, numberList);
+
+    var subject = new Subject<boolean>();
+
+    this.handleContactsMessageSending(0, contactList, groupList, numberList, content, subject);
+
+  	//console.log(content);
+  	//console.log(date);
+
+    return subject.asObservable();
+  }
+
+  handleContactsMessageSending(i, contactList, groupList, numberList, content, subject){
+
+    if(i < contactList.length){
+
+      var message : Object = {
+          user_id: contactList[i],
+          text: content
+        }
+
+        console.log("toContact: ", message);
+
+        this.http.post<Object>
+          ('http://'
+            + config.backendIP
+            + ':'
+            + config.backendPort
+            + '/api/send_user', message)
+        .subscribe(data =>{
+          console.log(data);
+          this.handleContactsMessageSending(i+1, contactList, groupList, numberList, content, subject)
+        });
+
+    }else{
+      this.handleGroupsMessageSending(0, groupList, numberList, content, subject);
+    }
+
+  }
+
+  handleGroupsMessageSending(i, groupList, numberList, content, subject){
+
+    if(i < groupList.length){
+
+      var message : Object = {
+          group_id: groupList[i],
+          text: content
+        }
+
+        console.log("toGroup: ", message);
+
+        this.http.post<Object>
+          ('http://'
+            + config.backendIP
+            + ':'
+            + config.backendPort
+            + '/api/send_group', message)
+        .subscribe(data =>{
+          console.log(data);
+          this.handleGroupsMessageSending(i+1, groupList, numberList, content, subject)
+        });
+
+    }else{
+      this.handleNumberMessageSending(0, numberList, content, subject);
+    }
+
+  }
+
+  handleNumberMessageSending(i, numberList, content, subject){
+
+    if(i < numberList.length){
+
+      var message : Object = {
+          phone_number: numberList[i],
+          text: content
+        }
+
+        console.log("toNumber: ", message);
+
+        this.http.post<Object>
+          ('http://'
+            + config.backendIP
+            + ':'
+            + config.backendPort
+            + '/api/send_number', message)
+        .subscribe(data =>{
+          console.log(data);
+          this.handleNumberMessageSending(i+1, numberList, content, subject)
+        });
+
+    } else {
+      subject.next(true);
+    }
+
   }
 
 }

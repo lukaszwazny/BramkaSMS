@@ -26,23 +26,35 @@ export class ContactEditComponent implements OnInit {
   name = '';
   surname = '';
   
-  groupsOfContact: Group[];
+  groupsOfContact = [];
 
-  groupList: Group[];
+  groupList = [];
 
   dropdownSettings = {};
 
-  constructor(private groupsService: GroupsService, private contactsService: ContactsService, private route: ActivatedRoute, private router: Router,) { }
+  constructor(private groupsService: GroupsService, private contactsService: ContactsService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
   	let id = this.route.snapshot.paramMap.get('id');
     this.contactsService.getContact(id)
-        .subscribe(contact => this.contact = contact);
+        .subscribe(contact => {
+          this.contact = contact;
+          this.contactsService.getContactGroups(id)
+          .subscribe(groups => {
+          this.groupsService
+            .getGroupList()
+            .subscribe(group => {
+              this.groupList = group; 
+              console.log(group);
+              this.groupsOfContact = groups;
+              console.log(this.groupsOfContact);
+            });
+            
+            
+          });
+        });
     //this.contact = this.contactsService.getContact(id);
-    this.groupsOfContact = this.contactsService.getContactGroups(id);
-    this.groupsService
-  		.getGroupList()
-  		.subscribe(group => this.groupList = group);
+    
 
   	this.name = this.contact.name;
   	this.surname = this.contact.surname;
@@ -56,7 +68,7 @@ export class ContactEditComponent implements OnInit {
       searchPlaceholderText: 'Szukaj',
       itemsShowLimit: 3,
       allowSearchFilter: true,
-      noDataAvailablePlaceholderText: 'Brak grup',
+      noDataAvailablePlaceholderText: 'Brak grup'
     };
   }
 
@@ -69,6 +81,12 @@ export class ContactEditComponent implements OnInit {
 
   	this.contactsService.updateContact(this.contact, this.groupsOfContact);
   	this.toContactDetails();
+  }
+  onItemSelect(item: any) {
+    console.log(this.groupsOfContact);
+  }
+  onSelectAll(items: any) {
+    console.log(this.groupList);
   }
 
 }

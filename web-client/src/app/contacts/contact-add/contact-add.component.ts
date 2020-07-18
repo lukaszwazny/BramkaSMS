@@ -22,6 +22,7 @@ export class ContactAddComponent implements OnInit {
 
   groupList = [];
   selectedGroups = [];
+  i = 0;
   dropdownSettings = {};
 
   name = '';
@@ -34,7 +35,7 @@ export class ContactAddComponent implements OnInit {
 
   	this.groupsService
   		.getGroupList()
-  		.subscribe(group => this.groupList = group);
+  		.subscribe(group => {this.groupList = group; console.log(group)});
 
     this.dropdownSettings = {
       singleSelection: false,
@@ -62,8 +63,64 @@ export class ContactAddComponent implements OnInit {
   }
 
   addContact(){
-  	this.contactsService.addContact(this.name, this.surname, '+48' + this.phoneNumber, this.selectedGroups);
-  	this.router.navigate(['/contacts/list']);
+  	this.contactsService.addContact(this.name, this.surname, '+48' + this.phoneNumber)
+      .subscribe(data=>{
+        console.log(data);
+        this.contactsService.getContactList()
+          .subscribe(conList => {
+            console.log(conList.find(con => {return con.name == this.name}).id, this.selectedGroups[0].id);
+            var requestsDone = [];
+            this.selectedGroups.forEach((group, i) => {
+              requestsDone[i] = false;
+            });
+            requestsDone[0] = true;
+            requestsDone[this.selectedGroups.length] = false
+            //console.log("siemanko w mojej kuchni");
+            /*this.selectedGroups.forEach((group, i) => {
+              //console.log("siemanko w mojej kuchni");
+              while(!requestsDone[i+1]){
+                //console.log("siemanko w mojej kuchni");
+                if(requestsDone[i]){
+                  requestsDone[i] = false;
+                  console.log("siemanko w mojej kuchni");
+                  this.contactsService.addContactToGroup(
+                    conList.find(con => {return con.name == this.name}).id,
+                    group.id)
+                  .subscribe(elo => {
+                    subject.next()
+                    console.log(elo);
+                    requestsDone[i+1] = true;
+                    console.log("witam");
+                  });
+
+                }
+              }  
+            });*/
+            this.handleAddingContactToGroups(conList.find(con => {return con.name == this.name}).id);
+      
+            });            
+          });     
+  }
+
+
+
+  handleAddingContactToGroups(contactId){
+
+
+  if(this.i < this.selectedGroups.length){
+    console.log("elo");
+    this.contactsService.addContactToGroup(
+                    contactId,
+                    this.selectedGroups[this.i].id)
+                  .subscribe(elo => {
+                    console.log(elo);
+                    this.i++;
+                    this.handleAddingContactToGroups(contactId);
+                  });
+  }else{
+    this.router.navigate(['/contacts/list']);
+  }
+
   }
 
 }

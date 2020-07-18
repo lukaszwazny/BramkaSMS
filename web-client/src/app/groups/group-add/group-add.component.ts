@@ -23,6 +23,7 @@ export class GroupAddComponent implements OnInit {
   dropdownSettings = {};
 
   name = '';
+  i = 0;
 
   constructor(private contactsService: ContactsService, private router: Router, private groupsService: GroupsService) { }
 
@@ -30,7 +31,10 @@ export class GroupAddComponent implements OnInit {
 
   	this.contactsService
   		.getContactList()
-  		.subscribe(contact => this.contactList = contact);
+  		.subscribe(contact => {
+        this.contactList = contact;
+        this.contactList.forEach(con =>{con.fullData = con.name + ' ' + con.surname});
+      });
 
     this.dropdownSettings = {
       singleSelection: false,
@@ -58,8 +62,33 @@ export class GroupAddComponent implements OnInit {
   }
 
   addGroup(){
-  	this.groupsService.addGroup(this.name, this.selectedContacts);
-  	this.router.navigate(['/groups/list']);
+  	this.groupsService.addGroup(this.name)
+      .subscribe(data => {
+        console.log(data);
+        this.groupsService.getGroupList()
+          .subscribe(groupList => {
+            this.handleAddingContactToGroups(groupList.find(grou => {return grou.name == this.name}).id);
+          });
+      });
+  }
+
+  handleAddingContactToGroups(groupId){
+
+
+  if(this.i < this.selectedContacts.length){
+    console.log("elo");
+    this.contactsService.addContactToGroup(
+                    this.selectedContacts[this.i].id,
+                    groupId)
+                  .subscribe(elo => {
+                    console.log(elo);
+                    this.i++;
+                    this.handleAddingContactToGroups(groupId);
+                  });
+  }else{
+    this.router.navigate(['/groups/list']);
+  }
+
   }
 
 }
