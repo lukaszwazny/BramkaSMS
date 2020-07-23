@@ -28,7 +28,11 @@ export class ContactEditComponent implements OnInit {
   
   groupsOfContact = [];
 
+  begGroupsOfContact = [];
+
   groupList = [];
+
+  i = 0;
 
   dropdownSettings = {};
 
@@ -45,9 +49,21 @@ export class ContactEditComponent implements OnInit {
             .getGroupList()
             .subscribe(group => {
               this.groupList = group; 
-              console.log(group);
+              console.log('lista grup', group);
+              this.begGroupsOfContact = groups;
               this.groupsOfContact = groups;
               console.log(this.groupsOfContact);
+              this.dropdownSettings = {
+                singleSelection: false,
+                idField: 'id',
+                textField: 'name',
+                selectAllText: 'Zaznacz wszystko',
+                unSelectAllText: 'Odzaznacz wszystko',
+                searchPlaceholderText: 'Szukaj',
+                itemsShowLimit: 3,
+                allowSearchFilter: true,
+                noDataAvailablePlaceholderText: 'Brak grup'
+              };
             });
             
             
@@ -59,17 +75,7 @@ export class ContactEditComponent implements OnInit {
   	this.name = this.contact.name;
   	this.surname = this.contact.surname;
 
-  	this.dropdownSettings = {
-      singleSelection: false,
-      idField: 'id',
-      textField: 'name',
-      selectAllText: 'Zaznacz wszystko',
-      unSelectAllText: 'Odzaznacz wszystko',
-      searchPlaceholderText: 'Szukaj',
-      itemsShowLimit: 3,
-      allowSearchFilter: true,
-      noDataAvailablePlaceholderText: 'Brak grup'
-    };
+  	
   }
 
   toContactDetails() {
@@ -79,9 +85,78 @@ export class ContactEditComponent implements OnInit {
   updateContact(){
   	//this.contact.phoneNumber = '+48' + this.contact.phoneNumber;
 
-  	this.contactsService.updateContact(this.contact, this.groupsOfContact);
-  	this.toContactDetails();
+  	this.contactsService.updateContact(this.contact)
+      .subscribe(data => {
+        console.log(data);
+        this.handleAddingContactToGroups(this.contact.id);
+      });
+  	
   }
+
+  handleAddingContactToGroups(contactId){
+
+
+  if(this.groupsOfContact && this.i < this.groupsOfContact.length){
+    console.log(this.i);
+    var ifAdd = true;
+    if(this.begGroupsOfContact){
+      this.begGroupsOfContact.forEach(con => {
+      console.log(con);
+        if(con.id == this.groupsOfContact[this.i].id)
+         ifAdd = false;
+      });
+    }
+    if(ifAdd) {
+      this.contactsService.addContactToGroup(
+                    contactId,
+                    this.groupsOfContact[this.i].id)
+                  .subscribe(elo => {
+                    console.log(elo);
+                    this.i++;
+                    this.handleAddingContactToGroups(contactId);
+                  });
+    }else{
+      this.i++;
+      this.handleAddingContactToGroups(contactId);
+    }
+    
+  } else {
+    this.i = 0;
+    this.handleDeletingContactToGroups(contactId);
+  }
+
+  }
+
+  handleDeletingContactToGroups(contactId){
+
+
+  if(this.begGroupsOfContact && this.i < this.begGroupsOfContact.length){
+    console.log("toDel: ", this.begGroupsOfContact[this.i]);
+    var ifDel = true;
+    this.groupsOfContact.forEach(con => {
+      if(con.id == this.begGroupsOfContact[this.i].id)
+       ifDel = false;
+    });
+    if(ifDel){
+    console.log("deleting: ", this.begGroupsOfContact[this.i]);
+    this.contactsService.deleteContactFromGroup(
+                    contactId,
+                    this.begGroupsOfContact[this.i].id)
+                  .subscribe(elo => {
+                    console.log(elo);
+                    this.i++;
+                    this.handleDeletingContactToGroups(contactId);
+                  });
+    }else{
+      this.i++;
+      this.handleDeletingContactToGroups(contactId);
+    }
+  } else {
+    this.toContactDetails();
+  }
+
+  }
+
   onItemSelect(item: any) {
     console.log(this.groupsOfContact);
   }

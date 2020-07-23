@@ -55,7 +55,7 @@ export class MessageDetailsComponent implements OnInit {
           .subscribe(group => {
             this.receiver = {
               id: group ? this.message.group_id : null,
-              name: group ? group.name : "grupa usunięta"
+              name: group ? group.group_name : "grupa usunięta"
             }
           })
       }

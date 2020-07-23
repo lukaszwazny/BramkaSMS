@@ -48,8 +48,10 @@ export class ContactDetailsComponent implements OnInit {
   }
 
   deleteContact(){
-  	this.contactsService.deleteContact(this.contact.id);
-  	this.router.navigate(['/contacts']);
+  	this.contactsService.deleteContact(this.contact.id)
+      .subscribe(data => {
+        this.router.navigate(['/contacts']);
+      });
   	this.closeModal();
   }
 

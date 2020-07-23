@@ -54,7 +54,12 @@ export class MessageAddComponent implements OnInit {
         this.groupList = group;
         this.contactsService
           .getContactList()
-          .subscribe(contact => this.contactList = contact);
+          .subscribe(contact => {
+            this.contactList = contact;
+            this.contactList.forEach(con =>{
+              con.fullData = con.name + ' ' + con.surname + ', ' + con.phone_number;
+            });
+          });
       });
 
   	this.dropdownSettingsGroups = {
@@ -103,9 +108,9 @@ export class MessageAddComponent implements OnInit {
   	this.numberList = this.numberList.map(num => num.replace(/ /g, ''));
 
   	this.messagesService.sendMessage(this.selectedContacts.map( cont => cont.id ), 
-  									this.selectedGroups.map(group => group.id), 
-  									this.numberList, 
-  									this.content, 
+  									this.selectedGroups.map(group => group.id),
+  									this.numberList,
+  									this.content,
   									this.immediately ? new Date() : new Date(this.date))
         .subscribe( elo => {
           if(elo)

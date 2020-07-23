@@ -114,15 +114,15 @@ export class ContactsService {
         + id)
   }
 
-  updateContact(contact : Contact, groups: Group[]){
-  	//console.log('updating ' + contact.id + ' ' + contact.name + ' ' + //contact.surname + ' ' + contact.phoneNumber + ' ' + groups)
-    this.http.put<Contact>
+  updateContact(contact : Contact){
+  	console.log('updating ' + contact.id + ' ' + contact.name + ' ' + 
+      contact.surname + ' ' + contact.phone_number);
+    return this.http.put<Contact>
       ('http://'
         + config.backendIP
         + ':'
         + config.backendPort
-        + '/api/users', contact)
-        .subscribe(data => console.log(data));
+        + '/api/users', contact);
 
   }
 

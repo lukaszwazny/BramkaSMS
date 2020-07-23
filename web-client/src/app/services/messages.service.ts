@@ -126,18 +126,19 @@ export class MessagesService {
                 this.handleReceiverChange(i+1, list, subject);
               });
       }
-      if(list[i].receiver[0] == "g"){
+      else if(list[i].receiver[0] == "g"){
           this.groupsService.getGroup(parseInt(list[i].receiver.slice(1)))
             .subscribe(group => {
+                console.log('grupa', group);
                 if(group)
-                  list[i].receiver = group.name;
+                  list[i].receiver = 'Grupa - ' + group.group_name;
                 else
                   list[i].receiver = "grupa usunięta"
                 console.log("after", list[i]);
                 this.handleReceiverChange(i+1, list, subject);
               });
       }
-      if(list[i].receiver[0] == "+"){
+      else{
           this.handleReceiverChange(i+1, list, subject);
       }
     }else{
@@ -160,7 +161,7 @@ export class MessagesService {
   										receiver: (message.user_id != 0) ? ("u" + message.user_id) : 
                         (message.group_id != 0 ? ("g" + message.group_id ): 
                             (message.phone_number)),
-  										content: (shorten ? (message.text.slice(0,200) + '...') : message.text),
+  										content: (shorten ? (message.text.slice(0,50) + '...') : message.text),
   										date: message.timestamp.slice(0,10),
   		}));
 

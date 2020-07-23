@@ -68,7 +68,7 @@ export class ContactAddComponent implements OnInit {
         console.log(data);
         this.contactsService.getContactList()
           .subscribe(conList => {
-            console.log(conList.find(con => {return con.name == this.name}).id, this.selectedGroups[0].id);
+            console.log(conList.find(con => {return con.name == this.name}).id);
             var requestsDone = [];
             this.selectedGroups.forEach((group, i) => {
               requestsDone[i] = false;
@@ -96,7 +96,7 @@ export class ContactAddComponent implements OnInit {
                 }
               }  
             });*/
-            this.handleAddingContactToGroups(conList.find(con => {return con.name == this.name}).id);
+            this.handleAddingContactToGroups(conList.find(con => {return con.name == this.name && con.surname == this.surname}).id);
       
             });            
           });     
@@ -107,7 +107,7 @@ export class ContactAddComponent implements OnInit {
   handleAddingContactToGroups(contactId){
 
 
-  if(this.i < this.selectedGroups.length){
+  if(this.selectedGroups && this.i < this.selectedGroups.length){
     console.log("elo");
     this.contactsService.addContactToGroup(
                     contactId,
